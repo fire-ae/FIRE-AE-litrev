@@ -1,5 +1,14 @@
 # module to manage arXiv API for my literaturing reviewing
 
+"""
+
+Side note to venv
+This creates a venv with lr name: python -m venv D:\arxiv\lr
+Activation: D:\arxiv\lr\Scripts\activate.bat
+Deactivation: deactivate
+
+"""
+
 import requests # to retrieve data/pages from the URLs
 import time # to format day-month-year for temporal filter
 import os # to automatize file saving
@@ -11,15 +20,17 @@ def format_date(date):
     return date.strftime('%Y%m%d0000')
 
 def write_bibtex_entry(bib_file, arxiv_id, title, authors, published, summary=None):
-    """Write an individual BibTeX entry to the provided file."""
+    """Write an individual BibTeX entry to the provided file.
+    bib_file: the related .bib extended bibliography file
+    arxiv_id, title, authors: preprint metadata
+    published: year of publication    
+    """
     bib_file.write(f"@article{{{arxiv_id},\n")
     bib_file.write(f"  author = {{{' and '.join(authors)}}},\n")
     bib_file.write(f"  title = {{{title}}},\n")
     bib_file.write(f"  year = {{{published.split('-')[0]}}},\n")
     bib_file.write(f"  journal = {{arXiv}},\n")
     bib_file.write(f"  url = {{https://arxiv.org/abs/{arxiv_id}}},\n")
-    if summary:
-        bib_file.write(f"  summary = {{{summary}}},\n")
     bib_file.write("}\n\n")
 
 def download_pdf(pdf_url, pdf_path):
@@ -73,22 +84,34 @@ def download_arxiv_papers(start_date, end_date, num_paper, query_type, query, de
                 write_bibtex_entry(bib_file, arxiv_id, title, authors, published, summary)
                 pdf_path = os.path.join(pdf_folder, f"{arxiv_id}.pdf")
                 pdf_url = f"https://arxiv.org/pdf/{arxiv_id}.pdf"
-                if not os.path.exists(pdf_path):
+                if os.path.exists(pdf_path):
+                    print(f"File already exists, skipping: {pdf_path}")
+                else:
                     success = download_pdf(pdf_url, pdf_path)
-                    if not success:
+                    if success:
+                        time.sleep(delay)  # Delay only if a new download happens
+                    else:
                         print(f"Failed to download PDF for {arxiv_id}")
-                time.sleep(delay)
                 paper_count += 1
             print(f"{paper_count} papers processed.")
     else:
         print(f"Error with request. Status code: {response.status_code}")
 
-# Example usage:
+
+
+### The part that manages arXiv
+
 # For decomposition papers
-download_arxiv_papers('2024-10-22', '2024-10-28', 40, "dec", "cat:stat.ML OR cat:stat.ME AND (all:decomposition OR all:singular OR all:Fourier OR all:component OR all:factorization)")
+download_arxiv_papers('2024-11-05', '2024-11-11', 40, "dec", "cat:stat.ML OR cat:stat.ME AND (all:decomposition OR all:singular OR all:Fourier OR all:component OR all:factorization)")
 
 # For astro-ph.EP papers
-download_arxiv_papers('2024-10-09', '2024-10-14', 40, "astro", "cat:astro-ph.EP")
+download_arxiv_papers('2024-11-05', '2024-11-11', 60, "astro", "cat:astro-ph.EP")
 
 # For remote sensing papers
-download_arxiv_papers('2024-10-08', '2024-10-14', 40, "rs", "all:remote sensing")
+download_arxiv_papers(
+    start_date="2024-11-05",
+    end_date="2024-11-11",
+    num_paper=50,
+    query_type="rs",
+    query="(cat:eess.SP OR cat:cs.CV OR cat:stat.ML OR cat:stat.AP) AND all:\"remote sensing\""
+)
