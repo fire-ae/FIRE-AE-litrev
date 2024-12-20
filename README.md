@@ -86,12 +86,11 @@ download_arxiv_papers(
 ```
 repository/
 |
-|-- main_script.py        # Main Python script for arXiv automation
-|-- README.md             # Project documentation
-|-- requirements.txt      # Python dependencies
+|-- arxiv_preprint_download.py        # Main Python script for arXiv automation
+|-- README.md                         # Project documentation
 |-- outputs/
-    |-- *.bib             # BibTeX files
-    |-- topic_pdfs/       # Folders containing downloaded PDFs
+    |-- *.bib                         # BibTeX files
+    |-- topic_pdfs/                   # Folders containing downloaded PDFs
 ```
 
 ## License
