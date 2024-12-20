@@ -1,14 +1,5 @@
 # module to manage arXiv API for my literaturing reviewing
 
-"""
-
-Side note to venv
-This creates a venv with lr name: python -m venv D:\arxiv\lr
-Activation: D:\arxiv\lr\Scripts\activate.bat
-Deactivation: deactivate
-
-"""
-
 import requests # to retrieve data/pages from the URLs
 import time # to format day-month-year for temporal filter
 import os # to automatize file saving
