@@ -3,7 +3,7 @@
 
 import ads # Necessary to use ADS API
 
-def ret(query_terms: list | str, list_int: list | int = [], cite: bool = False, loca: str = ""):
+def ret(query_terms: list | str, page_num: int = 1, list_int: list | int = [], cite: bool = False, loca: str = ""):
     """
     Retrieves titles, publication years, citation counts, and abstracts based on query terms.
     Optionally retrieves BibTeX-formatted citations.
@@ -17,7 +17,7 @@ def ret(query_terms: list | str, list_int: list | int = [], cite: bool = False, 
         q=query_terms,
         fl=['title', 'abstract', 'year', 'citation_count', 'bibcode'],
         sort="year",
-        max_pages=1
+        max_pages=page_num
     )
     sq.execute()
 
