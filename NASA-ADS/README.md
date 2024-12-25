@@ -10,13 +10,13 @@ This repository provides tools to streamline literature reviews using the NASA A
 
 ## Repository Structure
 
-FIRE-AE-litrev/
-|-- README.md
-|-- litrev/
-│   |-- litrev.py         # Main script to execute queries
-│   |-- litrevlib.py      # Core library for reusable functions
-|-- output/               # Directory for storing exported BibTeX files
-
+```
+FIRE-AE-litrev/NASA-ADS/
+|
+|-- litrevmain.py                     # Main Python script for NASA/ADS literature review
+|-- README.md                         # Project documentation
+|-- litrevlib.py                      # Library and functions to run litrevmain.py
+```
 
 ## Prerequisites
 - **Python 3.8+**
