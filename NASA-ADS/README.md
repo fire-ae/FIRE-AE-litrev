@@ -38,7 +38,7 @@ FIRE-AE-litrev/NASA-ADS/
 3. Configure your NASA/ADS token:
     - Open litrev.py and replace the placeholder with your token:
       ```
-      ads.config.token = 'your_ads_api_token
+      ads.config.token = 'your_ads_api_token'
       ```
 ## Usage
 ### Running the Main Script
