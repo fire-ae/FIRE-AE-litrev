@@ -23,6 +23,10 @@ FIRE-AE-litrev/
 ## Sub-Repositories
 
 ### NASA-ADS
+
+>[!NOTE]
+>Problems can arise in BibTex retrieval parts (not yet for abstracts), so stay tuned for an update.
+
 This sub-repository contains tools for interacting with the NASA ADS API. It enables users to:
 - Search for articles based on specific keywords.
 - Retrieve metadata such as titles, publication years, citation counts, and abstracts.
