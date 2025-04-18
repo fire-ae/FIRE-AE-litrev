@@ -45,15 +45,15 @@ FIRE-AE-litrev/NASA-ADS/
 - Update the `query` variable in `litrev.py` with your desired keywords.
 - 1. First, only retrieve titles
 ```
-litrevlib.ret(['keyword1', 'keyword2'])
+results = litrevlib.query_ads(['keyword1', 'keyword2'], 1)
 ```
-  2. Second, retrieve abstracts of the interesting titles for you
+  2. Second, print titles, abstracts, publication year, number of citations of the retrieved entries
 ```
-litrevlib.ret(['keyword1', 'keyword2'], 3) # This retrieves the abstract for the 3rd entry
+litrevlib.print_lit(results)
 ```
 
   3. Retrieve .bibtex entries of relevant articles and export them to their desired .bib file
 ```
-litrevlib.ret(['keyword1', 'keyword2'], [2, 5], cite=True, loca='output/citations.bib')
+litrevlib.handle_selection(results, [2, 5], loca='output/citations.bib') #transfers 2nd and 5th entries to citations.bib as bibtex entries
 ```
 
