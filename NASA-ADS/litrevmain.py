@@ -1,25 +1,16 @@
 import ads
-import litrevlib
+from litrevlib import query_ads, print_lit, handle_selection
 
 ads.config.token = '' # You should generate this token after registering NASA/ADS freely. You can do this via Accounts >> Settings >> Account Settings >> API Token
 
-# Query parameters
-query = ['JWST', 'disk', 'exoplanet'] # parameters to query the .bibtex metadata
-locat = "D:/jwst-tex/oja/to-oja.bib" # location of the .bib extended bibliography file to export requested .bibtex entries
+# Initial query according to the parameters defined below
 
-# page_num is number of pages you would like to retrieve, default is 1 and corresponds to 50 articles, please use it with caution to not choking server
+query = ['lunar thermal environment'] # specify your query, like what you would enter when you reach out NASA/ADS web api search box.
 
-# Print titles, year, citation counts
-litrevlib.ret(query, page_num=1)
+results = query_ads(query,1) # 1 page = 50 entries at max.
 
-# Retrieve and print the 3rd item's detailed information
-litrevlib.ret(query, page_num=1, 3)
+locat = "" #location for your .bib file to transfer bibtex entries
 
-# Retrieve and append the 3rd item's BibTeX citation to a file
-litrevlib.ret(query, page_num=1, 3, cite=True, loca=locat)
+print_lit(results) # This prints titles, year of publication, number of citations, and abstract to the command panel screen
 
-# Retrieve and print multiple selected items' details
-litrevlib.ret(query, page_num=1, [6, 8, 9, 13, 17, 22, 23, 24, 25, 27, 30, 36, 37, 39, 47])
-
-# Retrieve multiple selected items' BibTeX citations and append them to a file
-litrevlib.ret(query, page_num=1, [13, 17, 23, 24, 25, 27, 30, 36, 37, 39, 47], cite=True, loca=locat)
+handle_selection(results, [1,5], loca = locat) # transfer 1st and 5th entries as bibtex entries to the locat bib file. 
