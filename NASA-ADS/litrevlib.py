@@ -1,43 +1,48 @@
 ## litrevlib.py
 ## Module to connect NASA ADS API and retrieve bibliography metadata in the .bibtex format
 
-import ads # Necessary to use ADS API
+import ads
+import random
+import string
 
-def ret(query_terms: list | str, page_num: int = 1, list_int: list | int = [], cite: bool = False, loca: str = ""):
+def query_ads(query_terms, pages=1):
+    """Queries ADS for user-specified query_terms and number of pages, default 1 will return 50 entries.
+       !!!This part requires internet connection!!!
     """
-    Retrieves titles, publication years, citation counts, and abstracts based on query terms.
-    Optionally retrieves BibTeX-formatted citations.
+    sq = ads.SearchQuery(q=query_terms,
+                         fl=['title', 'abstract', 'year', 'citation_count',
+                             'bibcode', 'author', 'pub', 'doi'],
+                         sort="year",
+                         max_pages=pages)
+    results = list(sq) # We will use this not only for printing but also picking entries to convert them .bibtex entries
+    print("Query completed successfully, returning ",len(results),"results.")
+    return results
 
-    :param query_terms: Search query terms to look up in NASA ADS.
-    :param list_int: List of integers or a single integer specifying items for detailed information.
-    :param cite: Flag to print BibTeX-formatted citations of the selected items.
-    :param loca: File location to append selected titles' BibTeX entries.
-    """
-    sq = ads.SearchQuery(
-        q=query_terms,
-        fl=['title', 'abstract', 'year', 'citation_count', 'bibcode'],
-        sort="year",
-        max_pages=page_num
-    )
-    sq.execute()
+def print_lit(results):
+    """Prints title, year, number of citations, and abstract of papers on command panel."""
+    for i, item in enumerate(results, 1):
+        print(i, item.title, "Pub. year:", item.year, "# of cit.", item.citation_count, '\n', item.abstract, '\n')
 
-    for i, item in enumerate(sq, start=1):
-        if not list_int:  # Quick look without abstracts
-            print(f"{i}. {item.title}\nPub. year: {item.year}, # of cit.: {item.citation_count}\n")
-        elif isinstance(list_int, list) and i in list_int:
-            print(f"{i}. {item.title}\nPub. year: {item.year}, # of cit.: {item.citation_count}\n\n{item.abstract}\n")
-            if cite:
-                _export_citation(item.bibcode, loca)
-        elif isinstance(list_int, int) and i == list_int:
-            print(f"{i}. {item.title}\nPub. year: {item.year}, # of cit.: {item.citation_count}\n\n{item.abstract}\n")
-            if cite:
-                _export_citation(item.bibcode, loca)
-            break
+def make_bibtex(item):
+    """Crafts bibtex entries from query results."""
+    key = item.author[0].split()[-1] + str(item.year) + ''.join(random.choices(string.ascii_letters + string.digits, k=6))
+    authors = ' and '.join(item.author)
+    bibtex = f"@article{{{key},\n" \
+             f"  author = {{{authors}}},\n" \
+             f"  title = {{{item.title[0]}}},\n" \
+             f"  year = {{{item.year}}},\n" \
+             f"  journal = {{{item.pub}}},\n" \
+             f"  bibcode = {{{item.bibcode}}},\n"
+    if hasattr(item, 'doi') and item.doi:
+        bibtex += f"  doi = {{{item.doi[0]}}},\n"
+    bibtex += "}"
+    return bibtex
 
-def _export_citation(bibcode: str, loca: str):
-    """Helper function to export BibTeX citation."""
-    citation = ads.ExportQuery(bibcode, format='bibtex').execute()
-    print("Citations\n---------\n", citation)
-    if loca:
-        with open(loca, 'a', encoding="utf-8") as file:
-            file.write(citation + "\n")
+def handle_selection(results, indices, loca=""):
+    """Transfers necessary entry information from results to the specified bibtex file at loca as bibtex entries."""
+    for i, item in enumerate(results, 1):
+        if (isinstance(indices, list) and i in indices) or (isinstance(indices, int) and i == indices):
+            bib = make_bibtex(item)
+            if loca:
+                with open(loca, 'a', encoding='utf-8') as f:
+                    f.write(bib + "\n")
