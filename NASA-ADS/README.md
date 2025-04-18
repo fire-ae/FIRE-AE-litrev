@@ -22,7 +22,7 @@ FIRE-AE-litrev/NASA-ADS/
 - **Python 3.8+**
 - **NASA ADS Python API**
   - Install via pip: `pip install ads`
-- A valid NASA ADS API token (available at [NASA ADS](https://ui.adsabs.harvard.edu/user/settings/token)).
+- A valid NASA ADS API token (available at [NASA ADS](https://ui.adsabs.harvard.edu/user/settings/token) free of charge after a free registration).
 
 ## Setup
 1. Clone the repository:
