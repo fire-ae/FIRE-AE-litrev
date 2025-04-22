@@ -5,26 +5,30 @@ import ads
 import random
 import string
 
-def query_ads(query_terms, pages=1):
-    """Queries ADS for user-specified query_terms and number of pages, default 1 will return 50 entries.
-       !!!This part requires internet connection!!!
+def abstract_ads(query_term, pages=1):
+    """Queries NASA ADS database entries abstract fields for a given string (not a list as in q!).
+    !!! This part requires internet connection, the rest does not !!!
+    Parameters:
+    query_term (string): Term to query the abstract fields of the NASA ADS.
+    pages (int): number of pages to retrieve, multiply by 50 to expect the maximum number of returned entry
+    Returns a list of ads.SearchQuery output that can be fed to print_lit and make_bibtex for further processing    
     """
-    sq = ads.SearchQuery(q=query_terms,
+    
+    sq = ads.SearchQuery(abstract=query_term,
                          fl=['title', 'abstract', 'year', 'citation_count',
                              'bibcode', 'author', 'pub', 'doi'],
                          sort="year",
                          max_pages=pages)
-    results = list(sq) # We will use this not only for printing but also picking entries to convert them .bibtex entries
+    results = list(sq)
     print("Query completed successfully, returning ",len(results),"results.")
     return results
 
 def print_lit(results):
-    """Prints title, year, number of citations, and abstract of papers on command panel."""
     for i, item in enumerate(results, 1):
         print(i, item.title, "Pub. year:", item.year, "# of cit.", item.citation_count, '\n', item.abstract, '\n')
 
 def make_bibtex(item):
-    """Crafts bibtex entries from query results."""
+    """Craft Bibtex entries with abstract and doi fields."""
     key = item.author[0].split()[-1] + str(item.year) + ''.join(random.choices(string.ascii_letters + string.digits, k=6))
     authors = ' and '.join(item.author)
     bibtex = f"@article{{{key},\n" \
@@ -32,6 +36,7 @@ def make_bibtex(item):
              f"  title = {{{item.title[0]}}},\n" \
              f"  year = {{{item.year}}},\n" \
              f"  journal = {{{item.pub}}},\n" \
+             f"  abstract = {{{item.abstract}}},\n" \
              f"  bibcode = {{{item.bibcode}}},\n"
     if hasattr(item, 'doi') and item.doi:
         bibtex += f"  doi = {{{item.doi[0]}}},\n"
