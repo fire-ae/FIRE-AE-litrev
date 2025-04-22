@@ -5,6 +5,16 @@ import ads
 import random
 import string
 
+def query_ads(query_terms, pages=1):
+    sq = ads.SearchQuery(q=query_terms,
+                         fl=['title', 'abstract', 'year', 'citation_count',
+                             'bibcode', 'author', 'pub', 'doi'],
+                         sort="year",
+                         max_pages=pages)
+    results = list(sq)
+    print("Query completed successfully, returning ",len(results),"results.")
+    return results
+
 def abstract_ads(query_term, pages=1):
     """Queries NASA ADS database entries abstract fields for a given string (not a list as in q!).
     !!! This part requires internet connection, the rest does not !!!
