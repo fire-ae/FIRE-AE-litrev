@@ -45,7 +45,9 @@ FIRE-AE-litrev/NASA-ADS/
 - Update the `query` variable in `litrev.py` with your desired keywords.
 - 1. First, only retrieve titles
 ```
-results = litrevlib.query_ads(['keyword1', 'keyword2'], 1)
+results = litrevlib.query_ads(['keyword1', 'keyword2'], 1) # queries q term in general
+# or
+results = litrevlib.abstract_ads("keyword",1) # specifically queries the abstract field
 ```
   2. Second, print titles, abstracts, publication year, number of citations of the retrieved entries
 ```
