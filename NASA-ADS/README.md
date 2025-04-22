@@ -36,13 +36,13 @@ FIRE-AE-litrev/NASA-ADS/
    pip install ads
    ```
 3. Configure your NASA/ADS token:
-    - Open litrev.py and replace the placeholder with your token:
+    - Open litrevmain.py and replace the placeholder with your token:
       ```
       ads.config.token = 'your_ads_api_token'
       ```
 ## Usage
 ### Running the Main Script
-- Update the `query` variable in `litrev.py` with your desired keywords.
+- Update the `query` variable in `litrevmain.py` with your desired keywords.
 - 1. First, only retrieve titles
 ```
 results = litrevlib.query_ads(['keyword1', 'keyword2'], 1) # queries q term in general
