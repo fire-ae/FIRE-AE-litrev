@@ -28,7 +28,7 @@ FIRE-AE-litrev/NASA-ADS/
 1. Clone the repository:
    ```
    bash
-   git clone https://github.com/your_username/FIRE-AE-litrev/NASA-ADS/.git
+   git clone  https://github.com/fire-ae/FIRE-AE-litrev.git
    cd FIRE-AE-litrev/NASA-ADS
    ```
 2. Install the required libraries:
